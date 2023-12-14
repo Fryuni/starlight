@@ -1,7 +1,9 @@
 ---
+import { Banner } from 'virtual:starlight/components';
 import type { Props } from '../props';
 ---
 
+<Banner {...Astro.props} />
 <div class="lg:sl-flex">
 	{
 		Astro.props.toc && (
@@ -32,8 +34,7 @@ import type { Props } from '../props';
 		.right-sidebar {
 			position: fixed;
 			top: 0;
-			border-inline-start: 1px solid var(--sl-color-gray-6);
-			padding-top: var(--sl-nav-height);
+			padding-top: calc(var(--sl-nav-height) * 2);
 			width: 100%;
 			height: 100vh;
 			overflow-y: auto;
@@ -42,6 +43,7 @@ import type { Props } from '../props';
 
 		.main-pane {
 			width: 100%;
+			border-inline-end: 1px solid var(--sl-color-gray-6);
 		}
 
 		:global([data-has-sidebar][data-has-toc]) .main-pane {

@@ -87,8 +87,6 @@ const pagefindEnabled =
 					lang={Astro.props.entryMeta.lang}
 					dir={Astro.props.entryMeta.dir}
 				>
-					{/* TODO: Revisit how this logic flows. */}
-					<Banner {...Astro.props} />
 					{
 						Astro.props.entry.data.hero ? (
 							<ContentPanel {...Astro.props}>
