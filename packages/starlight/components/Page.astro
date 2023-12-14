@@ -44,6 +44,7 @@ const pagefindEnabled =
 	data-has-toc={Boolean(Astro.props.toc)}
 	data-has-sidebar={Astro.props.hasSidebar}
 	data-has-hero={Boolean(Astro.props.entry.data.hero)}
+	transition:animate="initial"
 >
 	<head>
 		<Head {...Astro.props} />
