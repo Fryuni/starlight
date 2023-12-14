@@ -155,6 +155,7 @@
       "import": "./components/Search.astro"
     },
     "./props": "./props.ts",
+    "./routes": "./routes.ts",
     "./schema": "./schema.ts",
     "./types": "./types.ts",
     "./expressive-code": "./integrations/expressive-code/exports.ts",
