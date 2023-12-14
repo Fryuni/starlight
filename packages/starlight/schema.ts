@@ -45,8 +45,14 @@ const StarlightFrontmatterSchema = (context: SchemaContext) =>
 		hero: HeroSchema(context).optional(),
 
 		/**
+		 * The first publication date of the current page.
+		 * Overrides the `publicationDates` global config or the date generated from the Git history.
+		 */
+		firstPublished: z.union([z.date(), z.boolean()]).optional(),
+
+		/**
 		 * The last update date of the current page.
-		 * Overrides the `lastUpdated` global config or the date generated from the Git history.
+		 * Overrides the `publicationDates` global config or the date generated from the Git history.
 		 */
 		lastUpdated: z.union([z.date(), z.boolean()]).optional(),
 

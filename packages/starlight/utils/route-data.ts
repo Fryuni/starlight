@@ -6,7 +6,7 @@ import { generateToC, type TocItem } from './generateToC';
 import { getFileCommitDate } from './git';
 import { getPrevNextLinks, getSidebar, type SidebarEntry } from './navigation';
 import { ensureTrailingSlash } from './path';
-import type { Route } from './routing';
+import type { Route, StarlightDocsEntry } from './routing';
 import { localizedId } from './slugs';
 import { useTranslations } from './translations';
 
@@ -25,8 +25,6 @@ export interface StarlightRouteData extends Route {
 	pagination: ReturnType<typeof getPrevNextLinks>;
 	/** Table of contents for this page if enabled. */
 	toc: { minHeadingLevel: number; maxHeadingLevel: number; items: TocItem[] } | undefined;
-	/** JS Date object representing when this page was last updated if enabled. */
-	lastUpdated: Date | undefined;
 	/** URL object for the address where this page can be edited if enabled. */
 	editUrl: URL | undefined;
 	/** Record of UI strings localized for the current page. */
@@ -48,7 +46,6 @@ export function generateRouteData({
 		hasSidebar: entry.data.template !== 'splash',
 		pagination: getPrevNextLinks(sidebar, config.pagination, entry.data),
 		toc: getToC(props),
-		lastUpdated: getLastUpdated(props),
 		editUrl: getEditUrl(props),
 		labels: useTranslations(locale).all(),
 	};
@@ -67,20 +64,6 @@ function getToC({ entry, locale, headings }: PageProps) {
 		...tocConfig,
 		items: generateToC(headings, { ...tocConfig, title: t('tableOfContents.overview') }),
 	};
-}
-
-function getLastUpdated({ entry }: PageProps): Date | undefined {
-	if (entry.data.lastUpdated ?? config.lastUpdated) {
-		const currentFilePath = fileURLToPath(new URL('src/content/docs/' + entry.id, project.root));
-		let date = typeof entry.data.lastUpdated !== 'boolean' ? entry.data.lastUpdated : undefined;
-		if (!date) {
-			try {
-				({ date } = getFileCommitDate(currentFilePath, 'newest'));
-			} catch {}
-		}
-		return date;
-	}
-	return;
 }
 
 function getEditUrl({ entry, id, isFallback }: PageProps): URL | undefined {

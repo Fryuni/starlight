@@ -1,5 +1,7 @@
 import type { GetStaticPathsItem } from 'astro';
 import { type CollectionEntry, getCollection } from 'astro:content';
+import { fileURLToPath } from 'node:url';
+import project from 'virtual:starlight/project-context';
 import config from 'virtual:starlight/user-config';
 import {
 	type LocaleData,
@@ -8,6 +10,7 @@ import {
 	slugToLocaleData,
 	slugToParam,
 } from './slugs';
+import { getFileCommitDate } from './git';
 import { validateLogoImports } from './validateLogoImports';
 
 // Validate any user-provided logos imported correctly.
@@ -27,6 +30,10 @@ export interface Route extends LocaleData {
 	slug: string;
 	/** The unique ID for this page. */
 	id: string;
+	/** JS Date object representing when this page was last updated if enabled. */
+	lastUpdated: Date | undefined;
+	/** JS Date object representing when this page was first published if enabled. */
+	firstPublished: Date | undefined;
 	/** True if this page is untranslated in the current language and using fallback content from the default locale. */
 	isFallback?: true;
 	[key: string]: unknown;
@@ -46,11 +53,12 @@ const normalizeIndexSlug = (slug: string) => (slug === 'index' ? '' : slug);
 
 /** All entries in the docs content collection. */
 const docs: StarlightDocsEntry[] = ((await getCollection('docs')) ?? []).map(
-	({ slug, ...entry }) => ({
+	({ slug, ...entry }): StarlightDocsEntry => ({
 		...entry,
 		slug: normalizeIndexSlug(slug),
 	})
-);
+)
+	.map(entry => ({...entry, ...getEntryDates(entry)}));
 
 function getRoutes(): Route[] {
 	const routes: Route[] = docs.map((entry) => ({
@@ -59,6 +67,8 @@ function getRoutes(): Route[] {
 		id: entry.id,
 		entryMeta: slugToLocaleData(entry.slug),
 		...slugToLocaleData(entry.slug),
+		firstPublished: entry.firstPublished,
+		lastUpdated: entry.lastUpdated,
 	}));
 
 	// In multilingual sites, add required fallback routes.
@@ -87,6 +97,8 @@ function getRoutes(): Route[] {
 					locale,
 					dir: localeConfig.dir,
 					entryMeta: slugToLocaleData(fallback.slug),
+					firstPublished: fallback.firstPublished,
+					lastUpdated: fallback.lastUpdated,
 				});
 			}
 		}
@@ -149,4 +161,42 @@ function filterByLocale<T extends { slug: string }>(items: T[], locale: string |
 		}
 	}
 	return items;
+}
+
+type EntryDates = {
+	firstPublished: Date | undefined,
+	lastUpdated: Date | undefined,
+};
+
+export function getEntryDates(entry: StarlightDocsEntry): EntryDates {
+	const dates: EntryDates = {
+		firstPublished: undefined,
+		lastUpdated: undefined,
+	};
+
+	if (entry.data.lastUpdated ?? config.publicationDates) {
+		const currentFilePath = fileURLToPath(new URL('src/content/docs/' + entry.id, project.root));
+		if (entry.data.lastUpdated instanceof Date) {
+			dates.lastUpdated = entry.data.lastUpdated;
+		} else {
+			try {
+				const { date } = getFileCommitDate(currentFilePath, 'newest');
+				dates.lastUpdated = date;
+			} catch {}
+		}
+	}
+
+	if (entry.data.firstPublished ?? config.publicationDates) {
+		const currentFilePath = fileURLToPath(new URL('src/content/docs/' + entry.id, project.root));
+		if (entry.data.firstPublished instanceof Date) {
+			dates.firstPublished = entry.data.firstPublished;
+		} else {
+			try {
+				const { date } = getFileCommitDate(currentFilePath, 'oldest');
+				dates.firstPublished = date;
+			} catch {}
+		}
+	}
+
+	return dates;
 }

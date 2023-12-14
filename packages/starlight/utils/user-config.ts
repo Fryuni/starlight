@@ -169,11 +169,11 @@ const UserConfigSchema = z.object({
 	 */
 	customCss: z.string().array().optional().default([]),
 
-	/** Define if the last update date should be visible in the page footer. */
-	lastUpdated: z
+	/** Define if the publication date and last update date should be visible in the page footer. */
+	publicationDates: z
 		.boolean()
 		.default(false)
-		.describe('Define if the last update date should be visible in the page footer.'),
+		.describe('Define if the publication date and last update date should be visible in the page footer.'),
 
 	/** Define if the previous and next page links should be visible in the page footer. */
 	pagination: z
