@@ -162,7 +162,7 @@
     "./indexSSR.astro": "./indexSSR.astro",
     "./404.astro": "./404.astro",
     "./pagefind.ts": "./pagefind.ts",
-    "./style/markdown.css": "./style/markdown.css"
+    "./style/*": "./style/*"
   },
   "peerDependencies": {
     "astro": "^4.0.0"
