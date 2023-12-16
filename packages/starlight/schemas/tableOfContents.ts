@@ -6,6 +6,8 @@ export const TableOfContentsSchema = () =>
 	z
 		.union([
 			z.object({
+				/** Alternative label to use for the top of the page in the table of contents. */
+				overviewLabel: z.string().optional(),
 				/** The level to start including headings at in the table of contents. Default: 2. */
 				minHeadingLevel: z.number().int().min(1).max(6).optional().default(2),
 				/** The level to stop including headings at in the table of contents. Default: 3. */

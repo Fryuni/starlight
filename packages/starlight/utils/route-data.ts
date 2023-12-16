@@ -62,7 +62,7 @@ function getToC({ entry, locale, headings }: PageProps) {
 	const t = useTranslations(locale);
 	return {
 		...tocConfig,
-		items: generateToC(headings, { ...tocConfig, title: t('tableOfContents.overview') }),
+		items: generateToC(headings, { ...tocConfig, title: tocConfig.overviewLabel ?? t('tableOfContents.overview') }),
 	};
 }
 
