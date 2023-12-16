@@ -1,3 +1,4 @@
+import type { MdxOptions } from '@astrojs/mdx';
 import type { AstroIntegration } from 'astro';
 import { z } from 'astro/zod';
 import { StarlightConfigSchema, type StarlightUserConfig } from '../utils/user-config';
@@ -218,6 +219,7 @@ export type StarlightUserConfigWithPlugins = StarlightUserConfig & {
 	 * })
 	 */
 	plugins?: StarlightPluginsUserConfig;
+	mdxOptions?: MdxOptions;
 };
 
 export type StarlightPluginContext = Pick<

@@ -15,6 +15,7 @@ import { createTranslationSystemFromFs } from './utils/translations-fs';
 
 export default function StarlightIntegration({
 	plugins,
+	mdxOptions,
 	...opts
 }: StarlightUserConfigWithPlugins): AstroIntegration {
 	let userConfig: StarlightConfig;
@@ -89,7 +90,7 @@ export default function StarlightIntegration({
 					integrations.push(starlightSitemap(starlightConfig));
 				}
 				if (!allIntegrations.find(({ name }) => name === '@astrojs/mdx')) {
-					integrations.push(mdx());
+					integrations.push(mdx(mdxOptions));
 				}
 				updateConfig({
 					integrations,
