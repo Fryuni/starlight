@@ -13,8 +13,8 @@ if (route === undefined) {
   return new Response(null, {status: 404});
 }
 
-const { Content, headings } = await route.entry.render();
-const routeData = generateRouteData({ props: { ...route, headings }, url: Astro.url });
+const { Content, headings, remarkPluginFrontmatter } = await Astro.props.entry.render();
+const route = generateRouteData({ props: { ...Astro.props, headings, remarkPluginFrontmatter }, url: Astro.url });
 ---
 
-<Page {...routeData}><Content /></Page>
+<Page {...route}><Content /></Page>

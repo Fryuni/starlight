@@ -12,6 +12,7 @@ import { useTranslations } from './translations';
 
 interface PageProps extends Route {
 	headings: MarkdownHeading[];
+	remarkPluginFrontMatter: Record<string, unknown>;
 }
 
 export interface StarlightRouteData extends Route {
@@ -32,16 +33,23 @@ export interface StarlightRouteData extends Route {
 }
 
 export function generateRouteData({
-	props,
+  props,
 	url,
 }: {
 	props: PageProps;
 	url: URL;
 }): StarlightRouteData {
 	const { entry, locale } = props;
+	const {remarkPluginFrontMatter, ...routeProps} = props;
 	const sidebar = getSidebar(url.pathname, locale);
+
+	entry.data = {
+		...remarkPluginFrontMatter,
+		...entry.data,
+	};
+
 	return {
-		...props,
+		...routeProps,
 		sidebar,
 		hasSidebar: entry.data.template !== 'splash',
 		pagination: getPrevNextLinks(sidebar, config.pagination, entry.data),
