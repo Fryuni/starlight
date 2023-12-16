@@ -1,18 +1,16 @@
 import type { MarkdownHeading } from 'astro';
-import { fileURLToPath } from 'node:url';
 import project from 'virtual:starlight/project-context';
 import config from 'virtual:starlight/user-config';
 import { generateToC, type TocItem } from './generateToC';
-import { getFileCommitDate } from './git';
 import { getPrevNextLinks, getSidebar, type SidebarEntry } from './navigation';
 import { ensureTrailingSlash } from './path';
-import type { Route, StarlightDocsEntry } from './routing';
+import type { Route } from './routing';
 import { localizedId } from './slugs';
 import { useTranslations } from './translations';
 
 interface PageProps extends Route {
 	headings: MarkdownHeading[];
-	remarkPluginFrontMatter: Record<string, unknown>;
+	remarkPluginFrontmatter: Record<string, unknown>;
 }
 
 export interface StarlightRouteData extends Route {
@@ -40,11 +38,11 @@ export function generateRouteData({
 	url: URL;
 }): StarlightRouteData {
 	const { entry, locale } = props;
-	const {remarkPluginFrontMatter, ...routeProps} = props;
+	const {remarkPluginFrontmatter, ...routeProps} = props;
 	const sidebar = getSidebar(url.pathname, locale);
 
 	entry.data = {
-		...remarkPluginFrontMatter,
+		...remarkPluginFrontmatter,
 		...entry.data,
 	};
 

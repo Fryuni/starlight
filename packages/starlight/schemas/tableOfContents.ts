@@ -1,6 +1,10 @@
 import { z } from 'astro/zod';
 
-const defaults = { minHeadingLevel: 2, maxHeadingLevel: 3 };
+const defaults = {
+	overviewLabel: undefined,
+	minHeadingLevel: 2,
+	maxHeadingLevel: 3,
+};
 
 export const TableOfContentsSchema = () =>
 	z
