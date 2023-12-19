@@ -5,31 +5,39 @@ import Icon from '../user-components/Icon.astro';
 
 {/* This is intentionally inlined to avoid FOUC. */}
 <script is:inline>
-	window.StarlightThemeProvider = (() => {
-		const storedTheme =
-			typeof localStorage !== 'undefined' && localStorage.getItem('starlight-theme');
-		const theme =
-			storedTheme ||
-			(window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-		document.documentElement.dataset.theme = theme === 'light' ? 'light' : 'dark';
-		return {
-			updatePickers(theme = storedTheme || 'auto') {
-				document.querySelectorAll('starlight-theme-select').forEach((picker) => {
-					const select = picker.querySelector('select');
-					if (select) select.value = theme;
-					/** @type {HTMLTemplateElement | null} */
-					const tmpl = document.querySelector(`#theme-icons`);
-					const newIcon = tmpl && tmpl.content.querySelector('.' + theme);
-					if (newIcon) {
-						const oldIcon = picker.querySelector('svg.label-icon');
-						if (oldIcon) {
-							oldIcon.replaceChildren(...newIcon.cloneNode(true).childNodes);
+	if (!window.StarlightThemeProvider) {
+		window.StarlightThemeProvider = (() => {
+			const getTheme = () => {
+				return typeof localStorage !== 'undefined' && localStorage.getItem('starlight-theme');
+			};
+
+			const initialTheme =
+							getTheme() ||
+							(window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+
+			document.documentElement.dataset.theme = initialTheme === 'light' ? 'light' : 'dark';
+
+			return {
+				updatePickers(theme) {
+					const effectiveTheme = theme || getTheme() || 'auto';
+
+					document.querySelectorAll('starlight-theme-select').forEach((picker) => {
+						const select = picker.querySelector('select');
+						if (select) select.value = effectiveTheme;
+						/** @type {HTMLTemplateElement | null} */
+						const tmpl = document.querySelector(`#theme-icons`);
+						const newIcon = tmpl && tmpl.content.querySelector('.' + effectiveTheme);
+						if (newIcon) {
+							const oldIcon = picker.querySelector('svg.label-icon');
+							if (oldIcon) {
+								oldIcon.replaceChildren(...newIcon.cloneNode(true).childNodes);
+							}
 						}
-					}
-				});
-			},
-		};
-	})();
+					});
+				},
+			};
+		})();
+	}
 </script>
 
 <template id="theme-icons">

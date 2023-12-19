@@ -20,9 +20,11 @@ const { labels } = Astro.props;
 	/>
 </starlight-theme-select>
 
-{/* Inlined to avoid FOUC. Uses global scope from `ThemeProvider.astro` */}
 <script is:inline>
-	StarlightThemeProvider.updatePickers();
+	if (!window._themeSelectorInitialized) {
+		StarlightThemeProvider.updatePickers();
+		window._themeSelectorInitialized = true;
+	}
 </script>
 
 <script>
