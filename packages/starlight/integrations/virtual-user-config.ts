@@ -44,6 +44,11 @@ export function vitePluginStarlightUserConfig(
 		'virtual:starlight/components': Object.entries(opts.components)
 			.map(([name, path]) => `export { default as ${name} } from ${resolveId(path)};`)
 			.join(''),
+		'virtual:starlight/hooks': (
+			opts.hooks
+				? `const userHooks = await import(${resolveId(opts.hooks)});`
+				: 'const userHooks = {};'
+		) + 'export const routeHook = userHooks.routeHook;',
 	} satisfies Record<string, string>;
 
 	/** Mapping names prefixed with `\0` to their original form. */

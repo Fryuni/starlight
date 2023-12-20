@@ -156,6 +156,7 @@
     },
     "./props": "./props.ts",
     "./routes": "./routes.ts",
+    "./hooks": "./hooks.ts",
     "./schema": "./schema.ts",
     "./types": "./types.ts",
     "./expressive-code": "./integrations/expressive-code/exports.ts",

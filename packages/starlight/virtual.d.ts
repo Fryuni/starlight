@@ -60,3 +60,7 @@ declare module 'virtual:starlight/components' {
 
 	export const TwoColumnContent: typeof import('./components/TwoColumnContent.astro').default;
 }
+
+declare module 'virtual:starlight/hooks' {
+	export const routeHook: import('./hooks.ts').RouteHook | undefined;
+}

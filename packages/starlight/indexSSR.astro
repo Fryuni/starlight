@@ -5,9 +5,13 @@ import { paths, getRouteBySlugParam } from './utils/routing';
 
 import Page from './components/Page.astro';
 
+import {routeHook} from 'virtual:starlight/hooks';
+
 export const prerender = false;
 
-const route = getRouteBySlugParam(Astro.params.slug);
+const hook = routeHook ?? <T>(route: T): T => route;
+
+const route = await hook(getRouteBySlugParam(Astro.params.slug));
 
 if (route === undefined) {
   return new Response(null, {status: 404});
