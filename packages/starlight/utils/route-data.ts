@@ -1,6 +1,7 @@
 import type { MarkdownHeading } from 'astro';
 import project from 'virtual:starlight/project-context';
 import config from 'virtual:starlight/user-config';
+import { sidebarHook } from 'virtual:starlight/hooks';
 import { generateToC, type TocItem } from './generateToC';
 import { getPrevNextLinks, getSidebar, type SidebarEntry } from './navigation';
 import { ensureTrailingSlash } from './path';
@@ -30,16 +31,16 @@ export interface StarlightRouteData extends Route {
 	labels: ReturnType<ReturnType<typeof useTranslations>['all']>;
 }
 
-export function generateRouteData({
+export async function generateRouteData({
   props,
 	url,
 }: {
 	props: PageProps;
 	url: URL;
-}): StarlightRouteData {
+}): Promise<StarlightRouteData> {
 	const { entry, locale } = props;
 	const {remarkPluginFrontmatter, ...routeProps} = props;
-	const sidebar = getSidebar(url.pathname, locale);
+	const sidebar = await sidebarHook(props, getSidebar(url.pathname, locale));
 
 	entry.data = {
 		...remarkPluginFrontmatter,
