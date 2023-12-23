@@ -9,16 +9,14 @@ import {routeHook} from 'virtual:starlight/hooks';
 
 export const prerender = false;
 
-const hook = routeHook ?? <T>(route: T): T => route;
-
-const route = await hook(getRouteBySlugParam(Astro.params.slug));
+const route = await routeHook(getRouteBySlugParam(Astro.params.slug));
 
 if (route === undefined) {
   return new Response(null, {status: 404});
 }
 
 const { Content, headings, remarkPluginFrontmatter } = await Astro.props.entry.render();
-const route = generateRouteData({ props: { ...Astro.props, headings, remarkPluginFrontmatter }, url: Astro.url });
+const routeData = generateRouteData({ props: { ...Astro.props, headings, remarkPluginFrontmatter }, url: Astro.url });
 ---
 
-<Page {...route}><Content /></Page>
+<Page {...routeData}><Content /></Page>

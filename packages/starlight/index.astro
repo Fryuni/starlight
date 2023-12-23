@@ -10,16 +10,14 @@ import {routeHook} from 'virtual:starlight/hooks';
 export const prerender = true;
 
 export async function getStaticPaths() {
-	return routeHook === undefined
-		? paths
-		: Promise.all(paths.map(async (path) => {
-			const route = await routeHook(path.props);
-			return route === undefined ? undefined : {
-				...path,
-				props: route,
-			};
-		}))
-			.then((routes) => routes.filter((route) => route !== undefined));
+	return Promise.all(paths.map(async (path) => {
+		const route = await routeHook(path.props);
+		return route === undefined ? undefined : {
+			...path,
+			props: route,
+		};
+	}))
+		.then((routes) => routes.filter((route) => route !== undefined));
 }
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;

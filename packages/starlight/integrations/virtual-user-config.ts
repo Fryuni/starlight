@@ -48,7 +48,12 @@ export function vitePluginStarlightUserConfig(
 			opts.hooks
 				? `const userHooks = await import(${resolveId(opts.hooks)});`
 				: 'const userHooks = {};'
-		) + 'export const routeHook = userHooks.routeHook;',
+		) + [
+			'const identity = (x) => x;',
+			'export const routeHook = userHooks.routeHook ?? identity;',
+			'export const allRoutesHook = userHooks.allRoutesHook ?? identity;',
+			'export const routeDataHook = userHooks.routeDataHook ?? identity;',
+		].join('\n'),
 	} satisfies Record<string, string>;
 
 	/** Mapping names prefixed with `\0` to their original form. */

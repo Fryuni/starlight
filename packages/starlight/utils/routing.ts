@@ -3,6 +3,7 @@ import { type CollectionEntry, getCollection } from 'astro:content';
 import { fileURLToPath } from 'node:url';
 import project from 'virtual:starlight/project-context';
 import config from 'virtual:starlight/user-config';
+import {allRoutesHook} from 'virtual:starlight/hooks';
 import {
 	type LocaleData,
 	localizedId,
@@ -19,6 +20,8 @@ validateLogoImports();
 
 export type StarlightDocsEntry = Omit<CollectionEntry<'docs'>, 'slug'> & {
 	slug: string;
+	firstPublished?: Date | undefined;
+	lastUpdated?: Date | undefined;
 };
 
 export interface Route extends LocaleData {
@@ -106,7 +109,7 @@ function getRoutes(): Route[] {
 
 	return routes;
 }
-export const routes = getRoutes();
+export const routes = await allRoutesHook(getRoutes());
 
 function getParamRouteMapping(): ReadonlyMap<string | typeof INDEX_SLUG_PARAM, Route> {
 	const map = new Map<string | typeof INDEX_SLUG_PARAM, Route>();
