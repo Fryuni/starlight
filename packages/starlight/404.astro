@@ -38,7 +38,7 @@ const fallbackEntry: StarlightDocsEntry = {
 const userEntry = await getEntry('docs', '404');
 const entry = userEntry || fallbackEntry;
 const { Content, headings } = await entry.render();
-const route = generateRouteData({
+const route = await generateRouteData({
 	props: { ...entryMeta, entryMeta, headings, entry, id: entry.id, slug: entry.slug },
 	url: Astro.url,
 });

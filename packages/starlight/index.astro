@@ -22,7 +22,7 @@ export async function getStaticPaths() {
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { Content, headings, remarkPluginFrontmatter } = await Astro.props.entry.render();
-const route = generateRouteData({ props: { ...Astro.props, headings, remarkPluginFrontmatter }, url: Astro.url });
+const route = await generateRouteData({ props: { ...Astro.props, headings, remarkPluginFrontmatter }, url: Astro.url });
 ---
 
 <Page {...route}><Content /></Page>

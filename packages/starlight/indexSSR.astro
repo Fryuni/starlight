@@ -16,7 +16,7 @@ if (route === undefined) {
 }
 
 const { Content, headings, remarkPluginFrontmatter } = await Astro.props.entry.render();
-const routeData = generateRouteData({ props: { ...Astro.props, headings, remarkPluginFrontmatter }, url: Astro.url });
+const routeData = await generateRouteData({ props: { ...Astro.props, headings, remarkPluginFrontmatter }, url: Astro.url });
 ---
 
 <Page {...routeData}><Content /></Page>
