@@ -13,9 +13,9 @@ vi.mock('astro:content', async () =>
 	})
 );
 
-test('adds data to route shape', () => {
+test('adds data to route shape', async () => {
 	const route = routes[0]!;
-	const data = generateRouteData({
+	const data = await generateRouteData({
 		props: { ...route, headings: [{ depth: 1, slug: 'heading-1', text: 'Heading 1' }] },
 		url: new URL('https://example.com'),
 	});
@@ -76,9 +76,9 @@ test('disables table of contents if frontmatter includes `tableOfContents: false
 	expect(data.toc).toBeUndefined();
 });
 
-test('uses explicit last updated date from frontmatter', () => {
+test('uses explicit last updated date from frontmatter', async () => {
 	const route = routes[3]!;
-	const data = generateRouteData({
+	const data = await generateRouteData({
 		props: { ...route, headings: [{ depth: 1, slug: 'heading-1', text: 'Heading 1' }] },
 		url: new URL('https://example.com/showcase/'),
 	});
@@ -86,9 +86,9 @@ test('uses explicit last updated date from frontmatter', () => {
 	expect(data.lastUpdated).toEqual(route.entry.data.lastUpdated);
 });
 
-test('includes localized labels', () => {
+test('includes localized labels', async () => {
 	const route = routes[0]!;
-	const data = generateRouteData({
+	const data = await generateRouteData({
 		props: { ...route, headings: [{ depth: 1, slug: 'heading-1', text: 'Heading 1' }] },
 		url: new URL('https://example.com'),
 	});

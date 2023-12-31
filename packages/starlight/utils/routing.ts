@@ -59,7 +59,7 @@ async function getDocsEntries(): Promise<StarlightDocsEntry[]> {
 		config.collectionNames.map(async (collectionName, index) => {
 			const collection = await getCollection(collectionName as ContentCollectionKey);
 
-			return collection.map(
+			return (collection ?? []).map(
 				(entry): StarlightDocsEntry => ({
 					...entry,
 					...getEntryDates(entry),

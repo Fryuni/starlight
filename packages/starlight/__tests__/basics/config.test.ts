@@ -17,8 +17,8 @@ test('default locale is set when no locales configured', () => {
 	expect(config.defaultLocale.dir).toBe('ltr');
 });
 
-test('lastUpdated defaults to false', () => {
-	expect(config.lastUpdated).toBe(false);
+test('publicationDates defaults to false', () => {
+	expect(config.publicationDates).toBe(false);
 });
 
 test('favicon defaults to the provided SVG icon', () => {

@@ -15,7 +15,7 @@ describe('fileWithBase()', () => {
 	// Astro controls BASE_URL via its `vite-plugin-env`, which prevents Vitest’s stubbing from
 	// working and there’s also no way to pass in Astro config in Astro’s `getViteConfig` helper.
 	describe.todo('with base', () => {
-		test('prepends base', () => {
+		test.todo('prepends base', () => {
 			vi.stubEnv('BASE_URL', '/base/');
 			expect(fileWithBase('/img.svg')).toBe('/base/img.svg');
 			vi.unstubAllEnvs();

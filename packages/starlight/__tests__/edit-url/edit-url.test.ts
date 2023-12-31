@@ -15,10 +15,10 @@ vi.mock('astro:content', async () =>
 	})
 );
 
-test('synthesizes edit URL using file location and `editLink.baseUrl`', () => {
+test('synthesizes edit URL using file location and `editLink.baseUrl`', async () => {
 	{
 		const route = routes[0]!;
-		const data = generateRouteData({
+		const data = await generateRouteData({
 			props: { ...route, headings: [] },
 			url: new URL('https://example.com'),
 		});
@@ -28,7 +28,7 @@ test('synthesizes edit URL using file location and `editLink.baseUrl`', () => {
 	}
 	{
 		const route = routes[1]!;
-		const data = generateRouteData({
+		const data = await generateRouteData({
 			props: { ...route, headings: [] },
 			url: new URL('https://example.com'),
 		});
@@ -38,9 +38,9 @@ test('synthesizes edit URL using file location and `editLink.baseUrl`', () => {
 	}
 });
 
-test('uses frontmatter `editUrl` if defined', () => {
+test('uses frontmatter `editUrl` if defined', async () => {
 	const route = routes[2]!;
-	const data = generateRouteData({
+	const data = await generateRouteData({
 		props: { ...route, headings: [] },
 		url: new URL('https://example.com'),
 	});
