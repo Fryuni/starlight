@@ -1,5 +1,5 @@
 import type { GetStaticPathsItem } from 'astro';
-import { type CollectionEntry, getCollection } from 'astro:content';
+import { type CollectionEntry, type ContentCollectionKey, getCollection } from 'astro:content';
 import { fileURLToPath } from 'node:url';
 import project from 'virtual:starlight/project-context';
 import config from 'virtual:starlight/user-config';
@@ -54,14 +54,29 @@ interface Path extends GetStaticPathsItem {
  */
 const normalizeIndexSlug = (slug: string) => (slug === 'index' ? '' : slug);
 
+async function getDocsEntries(): Promise<StarlightDocsEntry[]> {
+	const collectionsEntries = await Promise.all(
+		config.collectionNames.map(async (collectionName, index) => {
+			const collection = await getCollection(collectionName as ContentCollectionKey);
+
+			return collection.map(
+				(entry): StarlightDocsEntry => ({
+					...entry,
+					...getEntryDates(entry),
+					slug:
+						index === 0
+							? normalizeIndexSlug(entry.slug)
+							: `${collectionName}/${normalizeIndexSlug(entry.slug)}`,
+				})
+			);
+		})
+	);
+
+	return collectionsEntries.flat(1);
+}
+
 /** All entries in the docs content collection. */
-const docs: StarlightDocsEntry[] = ((await getCollection('docs')) ?? []).map(
-	({ slug, ...entry }): StarlightDocsEntry => ({
-		...entry,
-		slug: normalizeIndexSlug(slug),
-	})
-)
-	.map(entry => ({...entry, ...getEntryDates(entry)}));
+const docs: StarlightDocsEntry[] = await getDocsEntries();
 
 function getRoutes(): Route[] {
 	const routes: Route[] = docs.map((entry) => ({

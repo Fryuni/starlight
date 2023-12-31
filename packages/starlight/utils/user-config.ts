@@ -208,6 +208,10 @@ const UserConfigSchema = z.object({
 
 	hooks: z.string().optional(),
 
+	collectionNames: (z.string() as z.ZodType<ContentCollectionKey, z.ZodStringDef>)
+		.array()
+		.default(['docs']),
+
 	/**
 	 * Define whether Starlight pages should be prerendered or not.
 	 * Defaults to Astro's default behavior, prerender when "hybrid" and
