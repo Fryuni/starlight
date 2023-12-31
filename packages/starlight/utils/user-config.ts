@@ -1,4 +1,5 @@
 import { z } from 'astro/zod';
+import type { ContentCollectionKey } from 'astro:content';
 import { parse as bcpParse, stringify as bcpStringify } from 'bcp-47';
 import { ComponentConfigSchema } from '../schemas/components';
 import { ExpressiveCodeSchema } from '../schemas/expressiveCode';
@@ -173,7 +174,9 @@ const UserConfigSchema = z.object({
 	publicationDates: z
 		.boolean()
 		.default(false)
-		.describe('Define if the publication date and last update date should be visible in the page footer.'),
+		.describe(
+			'Define if the publication date and last update date should be visible in the page footer.'
+		),
 
 	/** Define if the previous and next page links should be visible in the page footer. */
 	pagination: z

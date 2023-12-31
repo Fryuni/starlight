@@ -44,17 +44,17 @@ export function vitePluginStarlightUserConfig(
 		'virtual:starlight/components': Object.entries(opts.components)
 			.map(([name, path]) => `export { default as ${name} } from ${resolveId(path)};`)
 			.join(''),
-		'virtual:starlight/hooks': (
-			opts.hooks
+		'virtual:starlight/hooks':
+			(opts.hooks
 				? `const userHooks = await import(${resolveId(opts.hooks)});`
-				: 'const userHooks = {};'
-		) + [
-			'const identity = (x) => x;',
-			'export const routeHook = userHooks.routeHook ?? identity;',
-			'export const allRoutesHook = userHooks.allRoutesHook ?? identity;',
-			'export const sidebarHook = userHooks.sidebarHook ?? ((_, sidebar) => sidebar);',
-			'export const routeDataHook = userHooks.routeDataHook ?? identity;',
-		].join('\n'),
+				: 'const userHooks = {};') +
+			[
+				'const identity = (x) => x;',
+				'export const routeHook = userHooks.routeHook ?? identity;',
+				'export const allRoutesHook = userHooks.allRoutesHook ?? identity;',
+				'export const sidebarHook = userHooks.sidebarHook ?? ((_, sidebar) => sidebar);',
+				'export const routeDataHook = userHooks.routeDataHook ?? identity;',
+			].join('\n'),
 	} satisfies Record<string, string>;
 
 	/** Mapping names prefixed with `\0` to their original form. */

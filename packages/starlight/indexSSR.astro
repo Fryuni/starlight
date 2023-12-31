@@ -5,18 +5,21 @@ import { paths, getRouteBySlugParam } from './utils/routing';
 
 import Page from './components/Page.astro';
 
-import {routeHook} from 'virtual:starlight/hooks';
+import { routeHook } from 'virtual:starlight/hooks';
 
 export const prerender = false;
 
 const route = await routeHook(getRouteBySlugParam(Astro.params.slug));
 
 if (route === undefined) {
-  return new Response(null, {status: 404});
+	return new Response(null, { status: 404 });
 }
 
 const { Content, headings, remarkPluginFrontmatter } = await Astro.props.entry.render();
-const routeData = await generateRouteData({ props: { ...Astro.props, headings, remarkPluginFrontmatter }, url: Astro.url });
+const routeData = await generateRouteData({
+	props: { ...Astro.props, headings, remarkPluginFrontmatter },
+	url: Astro.url,
+});
 ---
 
 <Page {...routeData}><Content /></Page>

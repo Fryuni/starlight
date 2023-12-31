@@ -12,8 +12,8 @@ import Icon from '../user-components/Icon.astro';
 			};
 
 			const initialTheme =
-							getTheme() ||
-							(window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+				getTheme() ||
+				(window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
 
 			document.documentElement.dataset.theme = initialTheme === 'light' ? 'light' : 'dark';
 

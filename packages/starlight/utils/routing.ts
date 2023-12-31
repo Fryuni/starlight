@@ -3,7 +3,7 @@ import { type CollectionEntry, type ContentCollectionKey, getCollection } from '
 import { fileURLToPath } from 'node:url';
 import project from 'virtual:starlight/project-context';
 import config from 'virtual:starlight/user-config';
-import {allRoutesHook} from 'virtual:starlight/hooks';
+import { allRoutesHook } from 'virtual:starlight/hooks';
 import {
 	type LocaleData,
 	localizedId,
@@ -182,8 +182,8 @@ function filterByLocale<T extends { slug: string }>(items: T[], locale: string |
 }
 
 type EntryDates = {
-	firstPublished: Date | undefined,
-	lastUpdated: Date | undefined,
+	firstPublished: Date | undefined;
+	lastUpdated: Date | undefined;
 };
 
 export function getEntryDates(entry: StarlightDocsEntry): EntryDates {

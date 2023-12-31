@@ -44,7 +44,8 @@ export default function StarlightIntegration({
 				// Always prerender on static mode
 				// Defaults to prerender on hybrid mode
 				// Defaults to not prerender on server mode
-				const prerender = astroOutput === 'static' || (starlightConfig.prerender ?? (astroOutput === 'hybrid'));
+				const prerender =
+					astroOutput === 'static' || (starlightConfig.prerender ?? astroOutput === 'hybrid');
 
 				userConfig = {
 					...starlightConfig,
@@ -62,8 +63,8 @@ export default function StarlightIntegration({
 				// Always pre-render for pagefind
 				if (!prerender && starlightConfig.pagefind) {
 					logger.warn(
-						'Pagefind cannot index SSR generated pages, the content will be pre-rendered for indexing but not included the final build.\n'
-						+ 'Build time may increase due to this extra work.'
+						'Pagefind cannot index SSR generated pages, the content will be pre-rendered for indexing but not included the final build.\n' +
+							'Build time may increase due to this extra work.'
 					);
 
 					injectRoute({
@@ -83,7 +84,7 @@ export default function StarlightIntegration({
 				const allIntegrations = [...config.integrations, ...integrations];
 				if (!allIntegrations.find(({ name }) => name === 'astro-expressive-code')) {
 					integrations.push(
-						...starlightExpressiveCode({ starlightConfig, astroConfig: config, useTranslations }),
+						...starlightExpressiveCode({ starlightConfig, astroConfig: config, useTranslations })
 					);
 				}
 				if (!allIntegrations.find(({ name }) => name === '@astrojs/sitemap')) {

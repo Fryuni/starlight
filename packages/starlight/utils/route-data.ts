@@ -32,14 +32,14 @@ export interface StarlightRouteData extends Route {
 }
 
 export async function generateRouteData({
-  props,
+	props,
 	url,
 }: {
 	props: PageProps;
 	url: URL;
 }): Promise<StarlightRouteData> {
 	const { entry, locale } = props;
-	const {remarkPluginFrontmatter, ...routeProps} = props;
+	const { remarkPluginFrontmatter, ...routeProps } = props;
 	const sidebar = await sidebarHook(props, getSidebar(url.pathname, locale));
 
 	entry.data = {
@@ -69,7 +69,10 @@ function getToC({ entry, locale, headings }: PageProps) {
 	const t = useTranslations(locale);
 	return {
 		...tocConfig,
-		items: generateToC(headings, { ...tocConfig, title: tocConfig.overviewLabel ?? t('tableOfContents.overview') }),
+		items: generateToC(headings, {
+			...tocConfig,
+			title: tocConfig.overviewLabel ?? t('tableOfContents.overview'),
+		}),
 	};
 }
 
