@@ -19,6 +19,8 @@ import { validateLogoImports } from './validateLogoImports';
 validateLogoImports();
 
 export type StarlightDocsEntry = Omit<CollectionEntry<'docs'>, 'slug'> & {
+	routeId: string;
+	collection: ContentCollectionKey;
 	slug: string;
 	firstPublished?: Date | undefined;
 	lastUpdated?: Date | undefined;
@@ -57,12 +59,14 @@ const normalizeIndexSlug = (slug: string) => (slug === 'index' ? '' : slug);
 async function getDocsEntries(): Promise<StarlightDocsEntry[]> {
 	const collectionsEntries = await Promise.all(
 		config.collectionNames.map(async (collectionName, index) => {
-			const collection = await getCollection(collectionName as ContentCollectionKey);
+			const collection = await getCollection(collectionName);
 
 			return (collection ?? []).map(
 				(entry): StarlightDocsEntry => ({
 					...entry,
 					...getEntryDates(entry),
+					routeId: index === 0 ? entry.id : `${collectionName}/${entry.id}`,
+					collection: collectionName,
 					slug:
 						index === 0
 							? normalizeIndexSlug(entry.slug)
@@ -82,7 +86,7 @@ function getRoutes(): Route[] {
 	const routes: Route[] = docs.map((entry) => ({
 		entry,
 		slug: entry.slug,
-		id: entry.id,
+		id: entry.routeId,
 		entryMeta: slugToLocaleData(entry.slug),
 		...slugToLocaleData(entry.slug),
 		firstPublished: entry.firstPublished,
@@ -186,7 +190,7 @@ type EntryDates = {
 	lastUpdated: Date | undefined;
 };
 
-export function getEntryDates(entry: StarlightDocsEntry): EntryDates {
+export function getEntryDates(entry: CollectionEntry<'docs'>): EntryDates {
 	const dates: EntryDates = {
 		firstPublished: undefined,
 		lastUpdated: undefined,
