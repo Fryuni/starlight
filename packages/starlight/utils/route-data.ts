@@ -1,7 +1,7 @@
 import type { MarkdownHeading } from 'astro';
 import project from 'virtual:starlight/project-context';
 import config from 'virtual:starlight/user-config';
-import { sidebarHook } from 'virtual:starlight/hooks';
+import { sidebarHook, routeDataHook } from 'virtual:starlight/hooks';
 import { generateToC, type TocItem } from './generateToC';
 import { getPrevNextLinks, getSidebar, type SidebarEntry } from './navigation';
 import { ensureTrailingSlash } from './path';
@@ -47,7 +47,7 @@ export async function generateRouteData({
 		...entry.data,
 	};
 
-	return {
+	return routeDataHook({
 		...routeProps,
 		sidebar,
 		hasSidebar: entry.data.template !== 'splash',
@@ -55,7 +55,7 @@ export async function generateRouteData({
 		toc: getToC(props),
 		editUrl: getEditUrl(props),
 		labels: useTranslations(locale).all(),
-	};
+	});
 }
 
 function getToC({ entry, locale, headings }: PageProps) {
