@@ -18,7 +18,9 @@ import { validateLogoImports } from './validateLogoImports';
 // We do this here so all pages trigger it and at the top level so it runs just once.
 validateLogoImports();
 
-export type StarlightDocsEntry = Omit<CollectionEntry<'docs'>, 'slug' | 'collection'> & {
+type BaseCollectionKey = 'docs' extends ContentCollectionKey ? 'docs' : ContentCollectionKey;
+
+export type StarlightDocsEntry = Omit<CollectionEntry<BaseCollectionKey>, 'slug' | 'collection'> & {
 	routeId: string;
 	collection: ContentCollectionKey;
 	slug: string;
