@@ -277,16 +277,13 @@ function sidebarFromDir(
 	);
 }
 
-const getLocaleRoutesMemoized = memoize(async (locale: string | undefined) =>
+const getLocaleRoutesMemoized = memoize((locale: string | undefined) =>
 	preSidebarRoutesHook(getLocaleRoutes(locale))
 );
 
 /** Get the sidebar for the current page. */
-export async function getSidebar(
-	pathname: string,
-	locale: string | undefined
-): Promise<SidebarEntry[]> {
-	const routes = await getLocaleRoutesMemoized(locale);
+export function getSidebar(pathname: string, locale: string | undefined): SidebarEntry[] {
+	const routes = getLocaleRoutesMemoized(locale);
 	if (config.sidebar) {
 		return config.sidebar.map((group) => configItemToEntry(group, pathname, locale, routes));
 	} else {

@@ -40,7 +40,7 @@ export async function generateRouteData({
 }): Promise<StarlightRouteData> {
 	const { entry, locale } = props;
 	const { remarkPluginFrontmatter, ...routeProps } = props;
-	const sidebar = await sidebarHook(props, await getSidebar(url.pathname, locale));
+	const sidebar = await sidebarHook(props, getSidebar(url.pathname, locale));
 
 	entry.data = {
 		...remarkPluginFrontmatter,

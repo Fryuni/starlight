@@ -17,7 +17,9 @@ export type SidebarHook = (route: Route, sidebar: Sidebar) => HookResult<Sidebar
 
 export const defineSidebarHook = (hook: SidebarHook) => hook;
 
-export const definePreSidebarRoutesHook = defineAllRoutesHook;
+export type PreSidebarRoutesHook = (routes: Route[]) => Route[];
+
+export const definePreSidebarRoutesHook = (hook: PreSidebarRoutesHook) => hook;
 
 export type RouteDataHook = (routeData: StarlightRouteData) => HookResult<StarlightRouteData>;
 

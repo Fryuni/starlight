@@ -65,6 +65,6 @@ declare module 'virtual:starlight/hooks' {
 	export const allRoutesHook: import('./hooks.ts').AllRoutesHook;
 	export const routeHook: import('./hooks.ts').RouteHook;
 	export const sidebarHook: import('./hooks.ts').SidebarHook;
-	export const preSidebarRoutesHook: import('./hooks.ts').AllRoutesHook;
+	export const preSidebarRoutesHook: import('./hooks.ts').PreSidebarRoutesHook;
 	export const routeDataHook: import('./hooks.ts').RouteDataHook;
 }
