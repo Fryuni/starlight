@@ -1,4 +1,5 @@
 import { basename, dirname } from 'node:path';
+import { preSidebarRoutesHook } from 'virtual:starlight/hooks';
 import config from 'virtual:starlight/user-config';
 import type { Badge } from '../schemas/badge';
 import type { PrevNextLinkConfig } from '../schemas/prevNextLink';
@@ -8,6 +9,7 @@ import type {
 	SidebarItem,
 	SidebarLinkItem,
 } from '../schemas/sidebar';
+import { memoize } from './base.ts';
 import { createPathFormatter } from './createPathFormatter';
 import { formatPath } from './format-path';
 import { pickLang } from './i18n';
@@ -275,9 +277,16 @@ function sidebarFromDir(
 	);
 }
 
+const getLocaleRoutesMemoized = memoize(async (locale: string | undefined) =>
+	preSidebarRoutesHook(getLocaleRoutes(locale))
+);
+
 /** Get the sidebar for the current page. */
-export function getSidebar(pathname: string, locale: string | undefined): SidebarEntry[] {
-	const routes = getLocaleRoutes(locale);
+export async function getSidebar(
+	pathname: string,
+	locale: string | undefined
+): Promise<SidebarEntry[]> {
+	const routes = await getLocaleRoutesMemoized(locale);
 	if (config.sidebar) {
 		return config.sidebar.map((group) => configItemToEntry(group, pathname, locale, routes));
 	} else {

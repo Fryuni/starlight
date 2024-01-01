@@ -18,7 +18,7 @@ import { validateLogoImports } from './validateLogoImports';
 // We do this here so all pages trigger it and at the top level so it runs just once.
 validateLogoImports();
 
-export type StarlightDocsEntry = Omit<CollectionEntry<'docs'>, 'slug'> & {
+export type StarlightDocsEntry = Omit<CollectionEntry<'docs'>, 'slug' | 'collection'> & {
 	routeId: string;
 	collection: ContentCollectionKey;
 	slug: string;
@@ -66,7 +66,6 @@ async function getDocsEntries(): Promise<StarlightDocsEntry[]> {
 					...entry,
 					...getEntryDates(entry),
 					routeId: index === 0 ? entry.id : `${collectionName}/${entry.id}`,
-					collection: collectionName,
 					slug:
 						index === 0
 							? normalizeIndexSlug(entry.slug)
@@ -160,6 +159,13 @@ export const paths = getPaths();
  */
 export function getLocaleRoutes(locale: string | undefined): Route[] {
 	return filterByLocale(routes, locale);
+}
+
+/**
+ * Get all routes from a specific content collection.
+ */
+export function getCollectionRoutes(collection: ContentCollectionKey): Route[] {
+	return routes.filter((route) => route.entry.collection === collection);
 }
 
 /**

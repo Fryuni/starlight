@@ -53,6 +53,7 @@ export function vitePluginStarlightUserConfig(
 				'export const routeHook = userHooks.routeHook ?? identity;',
 				'export const allRoutesHook = userHooks.allRoutesHook ?? identity;',
 				'export const sidebarHook = userHooks.sidebarHook ?? ((_, sidebar) => sidebar);',
+				'export const preSidebarRoutesHook = userHooks.preSidebarRoutesHook ?? identity;',
 				'export const routeDataHook = userHooks.routeDataHook ?? identity;',
 			].join('\n'),
 	} satisfies Record<string, string>;
