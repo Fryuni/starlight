@@ -111,7 +111,7 @@ const StarlightFrontmatterSchema = (context: SchemaContext) =>
 		pagefind: z.boolean().default(true),
 	});
 /** Type of Starlight’s default frontmatter schema. */
-type DefaultSchema = ReturnType<typeof StarlightFrontmatterSchema>;
+export type DefaultSchema = ReturnType<typeof StarlightFrontmatterSchema>;
 
 /** Plain object, union, and intersection Zod types. */
 type BaseSchemaWithoutEffects =

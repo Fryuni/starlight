@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import project from 'virtual:starlight/project-context';
 import config from 'virtual:starlight/user-config';
 import { allRoutesHook } from 'virtual:starlight/hooks';
+import type { DefaultSchema } from '../schema.ts';
 import {
 	type LocaleData,
 	localizedId,
@@ -18,11 +19,12 @@ import { validateLogoImports } from './validateLogoImports';
 // We do this here so all pages trigger it and at the top level so it runs just once.
 validateLogoImports();
 
-type BaseCollectionKey = 'docs' extends ContentCollectionKey ? 'docs' : ContentCollectionKey;
+type BaseCollectionKey = {
+	[K in ContentCollectionKey]: CollectionEntry<K> extends DefaultSchema ? K : never;
+}[ContentCollectionKey];
 
 export type StarlightDocsEntry = Omit<CollectionEntry<BaseCollectionKey>, 'slug' | 'collection'> & {
 	routeId: string;
-	collection: ContentCollectionKey;
 	slug: string;
 	firstPublished?: Date | undefined;
 	lastUpdated?: Date | undefined;
