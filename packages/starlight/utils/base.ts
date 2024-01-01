@@ -13,14 +13,3 @@ export function fileWithBase(path: string) {
 	path = stripLeadingSlash(path);
 	return path ? base + '/' + path : base;
 }
-
-export function memoize<T extends (...args: any[]) => any>(fn: T): T {
-	const cache = new Map<string, ReturnType<T>>();
-	return ((...args: Parameters<T>) => {
-		const key = args.join('\0');
-		if (cache.has(key)) return cache.get(key);
-		const result = fn(...args);
-		cache.set(key, result);
-		return result;
-	}) as T;
-}

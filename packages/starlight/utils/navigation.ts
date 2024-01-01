@@ -9,13 +9,13 @@ import type {
 	SidebarItem,
 	SidebarLinkItem,
 } from '../schemas/sidebar';
-import { memoize } from './base.ts';
 import { createPathFormatter } from './createPathFormatter';
 import { formatPath } from './format-path';
 import { pickLang } from './i18n';
 import { ensureLeadingSlash } from './path';
 import { getLocaleRoutes, type Route } from './routing';
 import { localeToLang, slugToPathname } from './slugs';
+import { memoize } from './memo';
 
 const DirKey = Symbol('DirKey');
 

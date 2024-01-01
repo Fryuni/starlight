@@ -1,6 +1,7 @@
 import type { AstroConfig, ViteUserConfig } from 'astro';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { clearMemoizationCache } from '../utils/memo';
 import type { StarlightConfig } from '../utils/user-config';
 
 function resolveVirtualModuleId<T extends string>(id: T): `\0${T}` {
@@ -74,6 +75,9 @@ export function vitePluginStarlightUserConfig(
 		load(id): string | void {
 			const resolution = resolutionMap[id];
 			if (resolution) return modules[resolution];
+		},
+		handleHotUpdate: () => {
+			clearMemoizationCache();
 		},
 	};
 }
