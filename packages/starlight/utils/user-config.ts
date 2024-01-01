@@ -1,5 +1,4 @@
 import { z } from 'astro/zod';
-import type { ContentCollectionKey } from 'astro:content';
 import { parse as bcpParse, stringify as bcpStringify } from 'bcp-47';
 import { ComponentConfigSchema } from '../schemas/components';
 import { ExpressiveCodeSchema } from '../schemas/expressiveCode';

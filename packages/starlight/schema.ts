@@ -111,7 +111,7 @@ const StarlightFrontmatterSchema = (context: SchemaContext) =>
 		pagefind: z.boolean().default(true),
 	});
 /** Type of Starlight’s default frontmatter schema. */
-export type DefaultSchema = ReturnType<typeof StarlightFrontmatterSchema>;
+type DefaultSchema = ReturnType<typeof StarlightFrontmatterSchema>;
 
 /** Plain object, union, and intersection Zod types. */
 type BaseSchemaWithoutEffects =
@@ -123,9 +123,7 @@ type BaseSchemaWithoutEffects =
 type BaseSchema = BaseSchemaWithoutEffects | z.ZodEffects<BaseSchemaWithoutEffects>;
 
 /** Type that extends Starlight’s default schema with an optional, user-defined schema. */
-type ExtendedSchema<T extends BaseSchema> = T extends z.AnyZodObject
-	? z.ZodObject<z.objectUtil.extendShape<DefaultSchema['shape'], T['shape']>>
-	: T extends BaseSchema
+type ExtendedSchema<T extends BaseSchema> = T extends BaseSchema
 	? z.ZodIntersection<DefaultSchema, T>
 	: DefaultSchema;
 
@@ -158,14 +156,6 @@ interface DocsSchemaOpts<T extends BaseSchema> {
 export function docsSchema<T extends BaseSchema>({ extend }: DocsSchemaOpts<T> = {}) {
 	return (context: SchemaContext): ExtendedSchema<T> => {
 		const UserSchema = typeof extend === 'function' ? extend(context) : extend;
-
-		if (UserSchema === undefined) {
-			return StarlightFrontmatterSchema(context) as ExtendedSchema<T>;
-		}
-
-		if (UserSchema instanceof z.ZodObject) {
-			return StarlightFrontmatterSchema(context).merge(UserSchema) as ExtendedSchema<T>;
-		}
 
 		return (
 			UserSchema

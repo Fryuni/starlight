@@ -35,9 +35,7 @@ const fallbackEntry: StarlightDocsEntry = {
 	}),
 };
 
-const collection = config.collectionNames[0] ?? 'docs';
-
-const userEntry = await getEntry(collection, '404');
+const userEntry = await getEntry('docs', '404');
 const entry = userEntry || fallbackEntry;
 const { Content, headings } = await entry.render();
 const route = await generateRouteData({

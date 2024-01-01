@@ -4,7 +4,6 @@ import { fileURLToPath } from 'node:url';
 import project from 'virtual:starlight/project-context';
 import config from 'virtual:starlight/user-config';
 import { allRoutesHook } from 'virtual:starlight/hooks';
-import type { DefaultSchema } from '../schema.ts';
 import {
 	type LocaleData,
 	localizedId,
@@ -19,12 +18,7 @@ import { validateLogoImports } from './validateLogoImports';
 // We do this here so all pages trigger it and at the top level so it runs just once.
 validateLogoImports();
 
-type BaseCollectionKey = {
-	[K in ContentCollectionKey]: CollectionEntry<K> extends DefaultSchema ? K : never;
-}[ContentCollectionKey];
-
-export type StarlightDocsEntry = Omit<CollectionEntry<BaseCollectionKey>, 'slug' | 'collection'> & {
-	routeId: string;
+export type StarlightDocsEntry = Omit<CollectionEntry<'docs'>, 'slug'> & {
 	slug: string;
 	firstPublished?: Date | undefined;
 	lastUpdated?: Date | undefined;
@@ -61,25 +55,15 @@ interface Path extends GetStaticPathsItem {
 const normalizeIndexSlug = (slug: string) => (slug === 'index' ? '' : slug);
 
 async function getDocsEntries(): Promise<StarlightDocsEntry[]> {
-	const collectionsEntries = await Promise.all(
-		config.collectionNames.map(async (collectionName, index) => {
-			const collection = await getCollection(collectionName);
+	const collection = await getCollection('docs');
 
-			return (collection ?? []).map(
-				(entry): StarlightDocsEntry => ({
-					...entry,
-					...getEntryDates(entry),
-					routeId: index === 0 ? entry.id : `${collectionName}/${entry.id}`,
-					slug:
-						index === 0
-							? normalizeIndexSlug(entry.slug)
-							: `${collectionName}/${normalizeIndexSlug(entry.slug)}`,
-				})
-			);
+	return collection.map(
+		(entry): StarlightDocsEntry => ({
+			...entry,
+			...getEntryDates(entry),
+			slug: normalizeIndexSlug(entry.slug),
 		})
 	);
-
-	return collectionsEntries.flat(1);
 }
 
 /** All entries in the docs content collection. */
@@ -89,7 +73,7 @@ function getRoutes(): Route[] {
 	const routes: Route[] = docs.map((entry) => ({
 		entry,
 		slug: entry.slug,
-		id: entry.routeId,
+		id: entry.id,
 		entryMeta: slugToLocaleData(entry.slug),
 		...slugToLocaleData(entry.slug),
 		firstPublished: entry.firstPublished,
@@ -166,13 +150,6 @@ export function getLocaleRoutes(locale: string | undefined): Route[] {
 }
 
 /**
- * Get all routes from a specific content collection.
- */
-export function getCollectionRoutes(collection: ContentCollectionKey): Route[] {
-	return routes.filter((route) => route.entry.collection === collection);
-}
-
-/**
  * Get all entries in the docs content collection for a specific locale.
  * A locale of `undefined` is treated as the “root” locale, if configured.
  */
@@ -200,7 +177,7 @@ type EntryDates = {
 	lastUpdated: Date | undefined;
 };
 
-export function getEntryDates(entry: CollectionEntry<BaseCollectionKey>): EntryDates {
+export function getEntryDates(entry: CollectionEntry<'docs'>): EntryDates {
 	const dates: EntryDates = {
 		firstPublished: undefined,
 		lastUpdated: undefined,
