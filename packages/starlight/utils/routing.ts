@@ -200,14 +200,17 @@ type EntryDates = {
 	lastUpdated: Date | undefined;
 };
 
-export function getEntryDates(entry: CollectionEntry<'docs'>): EntryDates {
+export function getEntryDates(entry: CollectionEntry<BaseCollectionKey>): EntryDates {
 	const dates: EntryDates = {
 		firstPublished: undefined,
 		lastUpdated: undefined,
 	};
 
+	const currentFilePath = fileURLToPath(
+		new URL(`src/content/${entry.collection}/${entry.id}`, project.root)
+	);
+
 	if (entry.data.lastUpdated ?? config.publicationDates) {
-		const currentFilePath = fileURLToPath(new URL('src/content/docs/' + entry.id, project.root));
 		if (entry.data.lastUpdated instanceof Date) {
 			dates.lastUpdated = entry.data.lastUpdated;
 		} else {
@@ -219,7 +222,6 @@ export function getEntryDates(entry: CollectionEntry<'docs'>): EntryDates {
 	}
 
 	if (entry.data.firstPublished ?? config.publicationDates) {
-		const currentFilePath = fileURLToPath(new URL('src/content/docs/' + entry.id, project.root));
 		if (entry.data.firstPublished instanceof Date) {
 			dates.firstPublished = entry.data.firstPublished;
 		} else {
