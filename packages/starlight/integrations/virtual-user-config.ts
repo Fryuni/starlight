@@ -69,6 +69,7 @@ export function vitePluginStarlightUserConfig(
 
 	return {
 		name: 'vite-plugin-starlight-user-config',
+		enforce: 'pre',
 		resolveId(id): string | void {
 			if (id in modules) return resolveVirtualModuleId(id);
 		},
