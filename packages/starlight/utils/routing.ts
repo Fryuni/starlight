@@ -192,7 +192,7 @@ export function getEntryDates(entry: CollectionEntry<'docs'>): EntryDates {
 			dates.lastUpdated = entry.data.lastUpdated;
 		} else {
 			try {
-				const { date } = getFileCommitDate(currentFilePath, 'newest');
+				const date = getFileCommitDate(currentFilePath, 'newest');
 				dates.lastUpdated = date;
 			} catch {}
 		}
@@ -203,7 +203,7 @@ export function getEntryDates(entry: CollectionEntry<'docs'>): EntryDates {
 			dates.firstPublished = entry.data.firstPublished;
 		} else {
 			try {
-				const { date } = getFileCommitDate(currentFilePath, 'oldest');
+				const date = getFileCommitDate(currentFilePath, 'oldest');
 				dates.firstPublished = date;
 			} catch {}
 		}
