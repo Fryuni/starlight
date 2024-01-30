@@ -23,6 +23,13 @@ export function vitePluginStarlightUserConfig(
 	const resolveId = (id: string) =>
 		JSON.stringify(id.startsWith('.') ? resolve(fileURLToPath(root), id) : id);
 
+	const virtualComponentModules = Object.fromEntries(
+		Object.entries(opts.components).map(([name, path]) => [
+			`virtual:starlight/components/${name}`,
+			`export { default } from ${resolveId(path)};`,
+		])
+	);
+
 	/** Map of virtual module names to their code contents as strings. */
 	const modules = {
 		'virtual:starlight/user-config': `export default ${JSON.stringify(opts)}`,
@@ -36,15 +43,12 @@ export function vitePluginStarlightUserConfig(
 		'virtual:starlight/user-images': opts.logo
 			? 'src' in opts.logo
 				? `import src from ${resolveId(
-						opts.logo.src
-				  )}; export const logos = { dark: src, light: src };`
+					opts.logo.src
+				)}; export const logos = { dark: src, light: src };`
 				: `import dark from ${resolveId(opts.logo.dark)}; import light from ${resolveId(
-						opts.logo.light
-				  )}; export const logos = { dark, light };`
+					opts.logo.light
+				)}; export const logos = { dark, light };`
 			: 'export const logos = {};',
-		'virtual:starlight/components': Object.entries(opts.components)
-			.map(([name, path]) => `export { default as ${name} } from ${resolveId(path)};`)
-			.join(''),
 		'virtual:starlight/hooks':
 			(opts.hooks
 				? `const userHooks = await import(${resolveId(opts.hooks)});`
@@ -57,6 +61,7 @@ export function vitePluginStarlightUserConfig(
 				'export const preSidebarRoutesHook = userHooks.preSidebarRoutesHook ?? identity;',
 				'export const routeDataHook = userHooks.routeDataHook ?? identity;',
 			].join('\n'),
+		...virtualComponentModules,
 	} satisfies Record<string, string>;
 
 	/** Mapping names prefixed with `\0` to their original form. */

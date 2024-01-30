@@ -221,6 +221,9 @@ const UserConfigSchema = z.object({
 	 * Does nothing when Astro's output mode is undefined or set to "static".
 	 */
 	prerender: z.boolean().optional(),
+
+	/** Disable Starlight's default 404 page. */
+	disable404Route: z.boolean().default(false).describe("Disable Starlight's default 404 page."),
 });
 
 export const StarlightConfigSchema = UserConfigSchema.strict().transform(
