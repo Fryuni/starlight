@@ -1,7 +1,6 @@
 ---
-import type { InferGetStaticPropsType } from 'astro';
 import { generateRouteData } from './utils/route-data';
-import { paths, getRouteBySlugParam } from './utils/routing';
+import { getRouteBySlugParam } from './utils/routing';
 
 import Page from './components/Page.astro';
 
@@ -9,7 +8,9 @@ import { routeHook } from 'virtual:starlight/hooks';
 
 export const prerender = false;
 
-const route = await routeHook(getRouteBySlugParam(Astro.params.slug));
+const baseRoute = getRouteBySlugParam(Astro.params.slug);
+
+const route = baseRoute && (await routeHook(baseRoute));
 
 if (route === undefined) {
 	return new Response(null, { status: 404 });
