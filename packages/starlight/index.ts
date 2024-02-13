@@ -64,7 +64,7 @@ export default function StarlightIntegration({
 				if (!prerender && starlightConfig.pagefind) {
 					logger.warn(
 						'Pagefind cannot index SSR generated pages, the content will be pre-rendered for indexing but not included the final build.\n' +
-							'Build time may increase due to this extra work.'
+						'Build time may increase due to this extra work.'
 					);
 
 					injectRoute({
@@ -111,6 +111,9 @@ export default function StarlightIntegration({
 					scopedStyleStrategy: 'where',
 					// If not already configured, default to prefetching all links on hover.
 					prefetch: config.prefetch ?? { prefetchAll: true },
+					experimental: {
+						globalRoutePriority: true,
+					},
 				});
 			},
 
