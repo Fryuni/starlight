@@ -4,7 +4,7 @@ description: Starlightサイトをカスタマイズして、ロゴ、カスタ�
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
-import FileTree from '~/components/file-tree.astro';
+import { FileTree } from '@astrojs/starlight/components';
 
 Starlightには標準的なスタイルと機能がデフォルトで用意されているため、設定不要ですぐに使い始めることができますが、Starlightサイトの見た目をカスタマイズしたくなった場合は、このガイドを参照してください。
 
@@ -265,6 +265,25 @@ hero:
   title: '404'
   tagline: ページが見つかりませんでした。URLを確認するか、検索バーを使用してみてください。
 ---
+```
+
+### デフォルトの404ページを無効にする
+
+完全にカスタマイズされた404レイアウトがプロジェクトに必要な場合は、`src/pages/404.astro`ルートを作成し、Starlightのデフォルトルートを無効にするために[`disable404Route`](/ja/reference/configuration/#disable404route)オプションを設定します。
+
+```js {9}
+// astro.config.mjs
+import { defineConfig } from 'astro/config';
+import starlight from '@astrojs/starlight';
+
+export default defineConfig({
+	integrations: [
+		starlight({
+			title: '404をカスタマイズしたドキュメント',
+			disable404Route: true,
+		}),
+	],
+});
 ```
 
 ## カスタムフォント

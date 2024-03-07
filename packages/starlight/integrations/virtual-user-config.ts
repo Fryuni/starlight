@@ -43,11 +43,11 @@ export function vitePluginStarlightUserConfig(
 		'virtual:starlight/user-images': opts.logo
 			? 'src' in opts.logo
 				? `import src from ${resolveId(
-						opts.logo.src
-				  )}; export const logos = { dark: src, light: src };`
+					opts.logo.src
+				)}; export const logos = { dark: src, light: src };`
 				: `import dark from ${resolveId(opts.logo.dark)}; import light from ${resolveId(
-						opts.logo.light
-				  )}; export const logos = { dark, light };`
+					opts.logo.light
+				)}; export const logos = { dark, light };`
 			: 'export const logos = {};',
 		'virtual:starlight/hooks':
 			(opts.hooks
@@ -61,6 +61,11 @@ export function vitePluginStarlightUserConfig(
 				'export const preSidebarRoutesHook = userHooks.preSidebarRoutesHook ?? identity;',
 				'export const routeDataHook = userHooks.routeDataHook ?? identity;',
 			].join('\n'),
+		'virtual:starlight/collection-config': `let userCollections;
+			try {
+				userCollections = (await import('/src/content/config.ts')).collections;
+			} catch {}
+			export const collections = userCollections;`,
 		...virtualComponentModules,
 	} satisfies Record<string, string>;
 
