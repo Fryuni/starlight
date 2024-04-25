@@ -62,7 +62,7 @@ describe('getFileCommitDate', () => {
 
 	test('throws when trying to get the history of a non-existing or untracked file', () => {
 		const expectedError =
-			/^Failed to validate the timestamp for file "[/\\-\w ]+\/(?:unknown|untracked)\.md"$/;
+			/^Failed to validate the timestamp for file "[/\\:-\w ]+[/\\](?:unknown|untracked)\.md"$/;
 		writeFile('untracked.md', 'content');
 
 		expect(() => getFileCommitDate(getFilePath('unknown.md'))).toThrow(expectedError);
