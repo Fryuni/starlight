@@ -32,5 +32,5 @@ jobs:
       - name: Test packages
         env:
           # Workaround windows inter-drive symlink issues
-          TMP_DIR: ${{ github.workspace }}
+          _TMP_DIR: ${{ github.workspace }}
         run: pnpm -r test:e2e

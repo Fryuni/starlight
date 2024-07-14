@@ -10,8 +10,9 @@ export function makeTestRepoDir() {
 		baseTmpDir = realpathSync(process.env.TMP_DIR);
 		mkdirSync(baseTmpDir, { recursive: true });
 	}
-	const tmpDir = mkdtempSync(join(baseTmpDir, 'starlight-test-git-'));
-	console.log({ baseTmpDir, tmpDir });
+	const tmpPrefix = join(baseTmpDir, 'starlight-test-git-');
+	const tmpDir = mkdtempSync(tmpPrefix);
+	console.log({ baseTmpDir, tmpPrefix, tmpDir });
 	return realpathSync(tmpDir);
 }
 
