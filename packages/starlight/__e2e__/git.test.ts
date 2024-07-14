@@ -21,7 +21,7 @@ test.beforeAll(async () => {
 	const sourcePath = new URL('./fixtures/git/', import.meta.url);
 	await cp(sourcePath, repoPath, { recursive: true });
 
-	const starlightLinkPath = pathToFileURL(join(fileURLToPath(import.meta.url), '../'));
+	const starlightLinkPath = pathToFileURL(join(fileURLToPath(import.meta.url), '../../'));
 
 	console.log({ starlightLinkPath });
 
