@@ -4,6 +4,9 @@ import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 
 export function makeTestRepoDir() {
+	if (process.env.TMP_DIR) {
+		mkdirSync(process.env.TMP_DIR, { recursive: true });
+	}
 	const tmpDir = mkdtempSync(join(process.env.TMP_DIR || tmpdir(), 'starlight-test-git-'));
 	return realpathSync(tmpDir);
 }
