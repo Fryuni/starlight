@@ -21,7 +21,7 @@ test.beforeAll(async () => {
 	const sourcePath = new URL('./fixtures/git/', import.meta.url);
 	await cp(sourcePath, repoPath, { recursive: true });
 
-	const starlightLinkPath = pathToFileURL(join(fileURLToPath(import.meta.url), '../../'));
+	const starlightLinkPath = join(fileURLToPath(import.meta.url), '../../');
 
 	console.log({ starlightLinkPath });
 
@@ -33,7 +33,6 @@ test.beforeAll(async () => {
 			version: '0.0.1',
 			dependencies: {
 				astro: astroPkg.version,
-				'@astrojs/starlight': starlightLinkPath,
 			},
 		}),
 		'.gitignore': 'node_modules\n.astro',
@@ -53,6 +52,8 @@ Home page content
 	});
 
 	testRepo.runInRepo('pnpm', ['install']);
+	// Add starlight using `pnpm add` so it computes the path to the package on Windows.
+	testRepo.runInRepo('pnpm', ['add', '-S', starlightLinkPath]);
 	testRepo.commitAllChanges('Add home page', '2024-02-03');
 });
 
