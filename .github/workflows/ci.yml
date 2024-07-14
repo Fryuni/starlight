@@ -30,4 +30,7 @@ jobs:
           cache: 'pnpm'
       - run: pnpm i
       - name: Test packages
+        env:
+          # Workaround windows inter-drive symlink issues
+          TMP_DIR: ${{ github.workspace }}/.tmp
         run: pnpm -r test:e2e

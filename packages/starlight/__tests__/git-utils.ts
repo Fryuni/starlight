@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 
 export function makeTestRepoDir() {
-	const tmpDir = mkdtempSync(join(tmpdir(), 'starlight-test-git-'));
+	const tmpDir = mkdtempSync(join(process.env.TMP_DIR || tmpdir(), 'starlight-test-git-'));
 	return realpathSync(tmpDir);
 }
 
