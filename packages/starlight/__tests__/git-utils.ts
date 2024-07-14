@@ -11,7 +11,12 @@ export function makeTestRepo(onPath?: string) {
 	const repoPath = realpathSync(onPath ?? mkdtempSync(join(tmpdir(), 'starlight-test-git-')));
 
 	function runInRepo(command: string, args: string[], env: NodeJS.ProcessEnv = process.env) {
-		const result = spawnSync(command, args, { cwd: repoPath, env, encoding: 'utf8' });
+		const result = spawnSync(command, args, {
+			cwd: repoPath,
+			env,
+			encoding: 'utf8',
+			shell: true,
+		});
 
 		if (result.status !== 0) {
 			console.log(result.stdout);
