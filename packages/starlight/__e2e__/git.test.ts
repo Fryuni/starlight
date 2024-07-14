@@ -2,7 +2,7 @@ import { makeTestRepo, makeTestRepoDir } from '../__tests__/git-utils';
 import { expect, testFactory } from './test-utils';
 import { cp, readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 
 const require = createRequire(import.meta.url);
@@ -11,6 +11,10 @@ const astroPkg = JSON.parse(await readFile(require.resolve('astro/package.json')
 const testRepoPath = makeTestRepoDir();
 
 const test = testFactory(testRepoPath);
+
+// Increase timeout to account for all the setup commands
+// running on CI.
+test.setTimeout(120_000);
 
 test.beforeAll(async () => {
 	// Setup separate
