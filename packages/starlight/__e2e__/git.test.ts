@@ -2,7 +2,8 @@ import { makeTestRepo, makeTestRepoDir } from '../__tests__/git-utils';
 import { expect, testFactory } from './test-utils';
 import { cp, readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { join } from 'node:path';
 
 const require = createRequire(import.meta.url);
 const astroPkg = JSON.parse(await readFile(require.resolve('astro/package.json'), 'utf8'));
@@ -20,7 +21,7 @@ test.beforeAll(async () => {
 	const sourcePath = new URL('./fixtures/git/', import.meta.url);
 	await cp(sourcePath, repoPath, { recursive: true });
 
-	const starlightLinkPath = new URL('../', import.meta.url);
+	const starlightLinkPath = pathToFileURL(join(fileURLToPath(import.meta.url), '../'));
 
 	console.log({ starlightLinkPath });
 
@@ -32,10 +33,7 @@ test.beforeAll(async () => {
 			version: '0.0.1',
 			dependencies: {
 				astro: astroPkg.version,
-				'@astrojs/starlight':
-					starlightLinkPath.protocol === 'file:'
-						? starlightLinkPath.href
-						: pathToFileURL(starlightLinkPath.toString()).href,
+				'@astrojs/starlight': starlightLinkPath,
 			},
 		}),
 		'.gitignore': 'node_modules\n.astro',

@@ -25,7 +25,7 @@ export function makeTestRepo(onPath?: string) {
 			cwd: repoPath,
 			env,
 			encoding: 'utf8',
-			shell: true,
+			shell: process.platform === 'win32',
 		});
 
 		if (result.status !== 0) {
