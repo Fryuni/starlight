@@ -4,13 +4,15 @@ import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 
 export function makeTestRepoDir() {
-	return realpathSync(mkdtempSync(join(tmpdir(), 'starlight-test-git-')));
+	const tmpDir = mkdtempSync(join(tmpdir(), 'starlight-test-git-'));
+	return realpathSync(tmpDir);
 }
 
 export function makeTestRepo(onPath?: string) {
 	const repoPath = realpathSync(onPath ?? mkdtempSync(join(tmpdir(), 'starlight-test-git-')));
 
 	function runInRepo(command: string, args: string[], env: NodeJS.ProcessEnv = process.env) {
+		console.log(`Running '${command} ${args.join(' ')}' in '${repoPath}'`);
 		const result = spawnSync(command, args, {
 			cwd: repoPath,
 			env,
