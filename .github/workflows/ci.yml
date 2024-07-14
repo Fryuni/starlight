@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest]
+        os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -30,6 +30,4 @@ jobs:
           cache: 'pnpm'
       - run: pnpm i
       - name: Test packages
-        run: |-
-          echo "PNPM path: $(which pnpm)"
-          pnpm -r test:e2e
+        run: pnpm -r test:e2e
