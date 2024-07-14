@@ -4,10 +4,14 @@ import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 
 export function makeTestRepoDir() {
+	let baseTmpDir = tmpdir();
 	if (process.env.TMP_DIR) {
-		mkdirSync(process.env.TMP_DIR, { recursive: true });
+		// Workaround windows inter-drive symlink issues
+		baseTmpDir = realpathSync(process.env.TMP_DIR);
+		mkdirSync(baseTmpDir, { recursive: true });
 	}
-	const tmpDir = mkdtempSync(join(process.env.TMP_DIR || tmpdir(), 'starlight-test-git-'));
+	const tmpDir = mkdtempSync(join(baseTmpDir, 'starlight-test-git-'));
+	console.log({ baseTmpDir, tmpDir });
 	return realpathSync(tmpDir);
 }
 
