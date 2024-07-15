@@ -21,11 +21,13 @@ export function makeTestRepo(onPath?: string) {
 
 	function runInRepo(command: string, args: string[], env: NodeJS.ProcessEnv = process.env) {
 		console.log(`Running '${command} ${args.join(' ')}' in '${repoPath}'`);
-		const result = spawnSync(command, args, {
+		const formattedArgs = process.platform === 'win32' ? args.map((arg) => `"${arg}"`) : args;
+		const result = spawnSync(command, formattedArgs, {
 			cwd: repoPath,
 			env,
 			encoding: 'utf8',
 			shell: process.platform === 'win32',
+			windowsVerbatimArguments: true,
 		});
 
 		if (result.status !== 0) {
