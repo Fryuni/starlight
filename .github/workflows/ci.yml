@@ -29,6 +29,11 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
       - run: pnpm i
+      - name: Package lib
+        working-directory: packages/starlight
+        run: |-
+          pnpm pack
+          mv astrojs-starlight-*.tgz astrojs-starlight.tgz
       - name: Test packages
         env:
           # Workaround windows inter-drive symlink issues

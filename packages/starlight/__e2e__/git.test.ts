@@ -12,10 +12,6 @@ const testRepoPath = makeTestRepoDir();
 
 const test = testFactory(testRepoPath);
 
-// Increase timeout to account for all the setup commands
-// running on CI.
-test.setTimeout(120_000);
-
 test.beforeAll(async () => {
 	// Setup separate
 	const testRepo = makeTestRepo(testRepoPath);
@@ -25,9 +21,10 @@ test.beforeAll(async () => {
 	const sourcePath = new URL('./fixtures/git/', import.meta.url);
 	await cp(sourcePath, repoPath, { recursive: true });
 
-	const starlightLinkPath = join(fileURLToPath(import.meta.url), '../../');
+	const starlightPath = join(fileURLToPath(import.meta.url), '../../astrojs-starlight.tgz');
+	await cp(starlightPath, join(repoPath, 'astrojs-starlight.tgz'));
 
-	console.log({ starlightLinkPath });
+	console.log({ starlightPath });
 
 	testRepo.writeFileTree({
 		'package.json': JSON.stringify({
@@ -37,6 +34,9 @@ test.beforeAll(async () => {
 			version: '0.0.1',
 			dependencies: {
 				astro: astroPkg.version,
+				// Add starlight using a packaged tarball to avoid
+				// linking problems on Windows.
+				'@astrojs/starlight': 'file:astrojs-starlight.tgz',
 			},
 		}),
 		'.gitignore': 'node_modules\n.astro',
@@ -56,8 +56,6 @@ Home page content
 	});
 
 	testRepo.runInRepo('pnpm', ['install']);
-	// Add starlight using `pnpm add` so it computes the path to the package on Windows.
-	testRepo.runInRepo('pnpm', ['add', '-S', starlightLinkPath]);
 	testRepo.commitAllChanges('Add home page', '2024-02-03');
 });
 
